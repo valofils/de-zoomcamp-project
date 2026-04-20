@@ -12,3 +12,10 @@ __pycache__/
 credentials/
 data/raw/
 01-docker-terraform/terraform/terraform.tfvars
+
+# dbt generated
+target/
+dbt_packages/
+logs/
+package-lock.yml
+profiles.yml
