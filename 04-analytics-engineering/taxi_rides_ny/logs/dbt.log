@@ -2843,3 +2843,90 @@ parsing.
 [0m14:17:32.494006 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7221b46818e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7221b4f5ac90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7221b4f580b0>]}
 [0m14:17:32.494490 [debug] [MainThread]: Flushing usage events
 [0m14:17:32.825036 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:17:48.893493 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e24c08890>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e24b01070>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e24b01460>]}
+
+
+============================== 14:17:48.900558 | d71b8b0f-39f9-4388-8605-f14c93adc51c ==============================
+[0m14:17:48.900558 [info ] [MainThread]: Running with dbt=1.11.8
+[0m14:17:48.902094 [debug] [MainThread]: running dbt with arguments {'log_cache_events': 'False', 'log_path': '/workspaces/de-zoomcamp-project/04-analytics-engineering/taxi_rides_ny/logs', 'use_experimental_parser': 'False', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'write_json': 'True', 'printer_width': '80', 'indirect_selection': 'eager', 'quiet': 'False', 'partial_parse': 'True', 'version_check': 'True', 'no_print': 'None', 'profiles_dir': '/workspaces/de-zoomcamp-project/04-analytics-engineering/taxi_rides_ny', 'log_format': 'default', 'warn_error': 'None', 'debug': 'False', 'empty': 'None', 'send_anonymous_usage_stats': 'True', 'cache_selected_only': 'False', 'use_colors': 'True', 'invocation_command': 'dbt docs serve --port 8081', 'fail_fast': 'False', 'introspect': 'True'}
+[0m14:17:50.546189 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'd71b8b0f-39f9-4388-8605-f14c93adc51c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e0d909610>]}
+[0m14:17:50.613398 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'd71b8b0f-39f9-4388-8605-f14c93adc51c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e0df16cc0>]}
+[0m14:17:50.994385 [error] [MainThread]: Encountered an error:
+[Errno 98] Address already in use
+[0m14:17:50.997929 [error] [MainThread]: Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 276, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 321, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 368, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/main.py", line 309, in docs_serve
+    results = task.run()
+              ^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/task/docs/serve.py", line 24, in run
+    with socketserver.TCPServer((host, port), SimpleHTTPRequestHandler) as httpd:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/socketserver.py", line 457, in __init__
+    self.server_bind()
+  File "/usr/local/python/3.12.1/lib/python3.12/socketserver.py", line 473, in server_bind
+    self.socket.bind(self.server_address)
+OSError: [Errno 98] Address already in use
+
+[0m14:17:50.998848 [debug] [MainThread]: Resource report: {"command_name": "serve", "command_success": false, "command_wall_clock_time": 2.1627312, "process_in_blocks": "520", "process_kernel_time": 0.293732, "process_mem_max_rss": "256372", "process_out_blocks": "3568", "process_user_time": 3.959008}
+[0m14:17:50.999731 [debug] [MainThread]: Command `dbt docs serve` failed at 14:17:50.999578 after 2.16 seconds
+[0m14:17:51.000223 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e26b73200>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e244ab5f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x789e0da2d490>]}
+[0m14:17:51.000915 [debug] [MainThread]: Flushing usage events
+[0m14:17:51.318809 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m14:18:25.550869 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f8e3575f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f8e6c8e30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f8e354d70>]}
+
+
+============================== 14:18:25.557513 | 111acb19-37b5-4f1a-9ac1-0df2a9e1902a ==============================
+[0m14:18:25.557513 [info ] [MainThread]: Running with dbt=1.11.8
+[0m14:18:25.558955 [debug] [MainThread]: running dbt with arguments {'cache_selected_only': 'False', 'version_check': 'True', 'log_cache_events': 'False', 'no_print': 'None', 'send_anonymous_usage_stats': 'True', 'introspect': 'True', 'target_path': 'None', 'printer_width': '80', 'warn_error': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_path': '/workspaces/de-zoomcamp-project/04-analytics-engineering/taxi_rides_ny/logs', 'debug': 'False', 'profiles_dir': '/workspaces/de-zoomcamp-project/04-analytics-engineering/taxi_rides_ny', 'static_parser': 'True', 'use_experimental_parser': 'False', 'write_json': 'True', 'fail_fast': 'False', 'invocation_command': 'dbt docs serve --port 8082', 'use_colors': 'True', 'log_format': 'default', 'partial_parse': 'True', 'indirect_selection': 'eager', 'empty': 'None'}
+[0m14:18:26.708786 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '111acb19-37b5-4f1a-9ac1-0df2a9e1902a', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f76a5dd60>]}
+[0m14:18:26.917299 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '111acb19-37b5-4f1a-9ac1-0df2a9e1902a', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f774faf30>]}
+[0m14:20:09.941329 [error] [MainThread]: Encountered an error:
+
+[0m14:20:09.944743 [error] [MainThread]: Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 276, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 321, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/requires.py", line 368, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/cli/main.py", line 309, in docs_serve
+    results = task.run()
+              ^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/dbt/task/docs/serve.py", line 29, in run
+    httpd.serve_forever()
+  File "/usr/local/python/3.12.1/lib/python3.12/socketserver.py", line 235, in serve_forever
+    ready = selector.select(poll_interval)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+[0m14:20:09.945915 [debug] [MainThread]: Resource report: {"command_name": "serve", "command_success": false, "command_wall_clock_time": 104.45642, "process_in_blocks": "200", "process_kernel_time": 0.261513, "process_mem_max_rss": "256456", "process_out_blocks": "3576", "process_user_time": 3.963319}
+[0m14:20:09.946950 [debug] [MainThread]: Command `dbt docs serve` failed at 14:20:09.946828 after 104.46 seconds
+[0m14:20:09.947448 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f8d4d1550>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f772dae40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7a0f774fbef0>]}
+[0m14:20:09.948146 [debug] [MainThread]: Flushing usage events
+[0m14:20:10.282973 [debug] [MainThread]: An error was encountered while trying to flush usage events
