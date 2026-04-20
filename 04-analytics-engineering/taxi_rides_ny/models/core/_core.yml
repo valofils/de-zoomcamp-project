@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: dim_zones
+    description: >
+      Dimension table of TLC Taxi Zones loaded from the taxi_zone_lookup seed CSV.
+      265 zones across 6 NYC boroughs plus EWR and Unknown.
+    columns:
+      - name: locationid
+        description: Primary key — TLC Taxi Zone ID (1–265)
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: NYC borough name
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Manhattan', 'Queens', 'Brooklyn', 'Bronx', 'Staten Island', 'EWR', 'Unknown']
+      - name: zone
+        description: Taxi zone name within the borough
+      - name: service_zone
+        description: Service zone type (Yellow Zone, Boro Zone, Airports, etc.)
+
+  - name: fact_trips
+    description: >
+      Core fact table of NYC Yellow Taxi trips for Jan–Jun 2024.
+      Enriched with pickup and dropoff zone info from dim_zones.
+      Partitioned by pickup month, clustered by vendorid and payment_type.
+      Rows with zero distance, zero fare, or zero passengers are excluded.
+    columns:
+      - name: tripid
+        description: Surrogate primary key (vendorid + pickup_datetime + dropoff_datetime)
+        tests:
+          - unique:
+              severity: warn
+          - not_null
+
+      - name: pickup_datetime
+        description: Trip start timestamp
+        tests:
+          - not_null
+
+      - name: dropoff_datetime
+        description: Trip end timestamp
+        tests:
+          - not_null
+
+      - name: trip_duration_minutes
+        description: Computed trip duration in minutes (dropoff minus pickup)
+
+      - name: pickup_locationid
+        description: TLC Zone ID for pickup
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_zones')
+              field: locationid
+
+      - name: dropoff_locationid
+        description: TLC Zone ID for dropoff
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_zones')
+              field: locationid
+
+      - name: payment_type_description
+        description: Human-readable payment type from get_payment_type_description macro
+
+      - name: total_amount
+        description: Total fare charged (USD)
+
+      - name: tip_pct
+        description: Tip as percentage of fare amount

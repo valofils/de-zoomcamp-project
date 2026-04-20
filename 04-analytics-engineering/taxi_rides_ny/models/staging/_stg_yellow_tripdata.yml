@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: stg_yellow_tripdata
+    description: >
+      Staged yellow taxi trip records. Casts all columns to the correct data types,
+      renames columns to snake_case, and generates a surrogate key for each trip.
+      Filtered to 2024-01 through 2024-06.
+    columns:
+      - name: tripid
+        description: Primary key — surrogate key from vendorid + pickup_datetime + dropoff_datetime
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: vendorid
+        description: TPEP provider code (1=Creative Mobile, 2=VeriFone)
+        tests:
+          - accepted_values:
+              values: [1, 2]
+              quote: false
+              severity: warn
+
+      - name: pickup_locationid
+        description: TLC Taxi Zone ID for pickup
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: locationid
+              severity: warn
+
+      - name: dropoff_locationid
+        description: TLC Taxi Zone ID for dropoff
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: locationid
+              severity: warn
+
+      - name: pickup_datetime
+        description: Pickup timestamp
+        tests:
+          - not_null
+
+      - name: dropoff_datetime
+        description: Dropoff timestamp
+        tests:
+          - not_null
+
+      - name: passenger_count
+        description: Number of passengers (0 means driver-only trips, nulls possible)
+
+      - name: trip_distance
+        description: Trip distance in miles
+
+      - name: payment_type
+        description: Numeric payment code
+
+      - name: payment_type_description
+        description: Human-readable payment type from macro
+
+      - name: fare_amount
+        description: Metered fare in USD
+
+      - name: total_amount
+        description: Total amount charged (excluding cash tips)

@@ -1,0 +1,12 @@
+taxi_rides_ny:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: food-security-pipeline
+      dataset: ny_taxi
+      threads: 4
+      timeout_seconds: 300
+      location: us-central1
+      keyfile: /home/codespace/.gcp/gcp-key.json
