@@ -11,3 +11,4 @@ __pycache__/
 *.duckdb
 credentials/
 data/raw/
+01-docker-terraform/terraform/terraform.tfvars
