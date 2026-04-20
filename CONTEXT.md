@@ -17,20 +17,24 @@
 - GCP_REGION=us-central1
 - GCS_BUCKET=food-security-pipeline-taxi-bucket
 - BQ_DATASET=ny_taxi
-- SA_EMAIL=de-zoomcamp-sa@food-security-pipeline.iam.gserviceaccount.com
+- SA_EMAIL=food-security-pipeline@food-security-pipeline.iam.gserviceaccount.com
+- GCP_KEY=/home/codespace/.gcp/gcp-key.json
 
 ## Current State
-- MODULE: 1 - Containerization & Infrastructure as Code
+- MODULE: 2 - Kestra Workflow Orchestration
 - STATUS: Complete
-- LAST_COMMIT: 1a4dbcf - fix: gitignore terraform.tfvars
-- GCP authenticated as: valofils@gmail.com
-- Postgres running: 3,041,717 rows in yellow_taxi_trips
-- GCS bucket provisioned
-- BigQuery dataset provisioned
-- NEXT_STEP: Module 2 - Kestra workflow orchestration
+- LAST_COMMIT: 1515a3e - feat: add monthly schedule trigger to taxi ingestion flow
+- Kestra running at port 8080 (pgAdmin at 8090)
+- Flow: nyc_taxi_ingestion (de.zoomcamp namespace)
+- BigQuery: 20.3M rows in food-security-pipeline.ny_taxi.yellow_tripdata (2024-01 to 2024-06)
+- GCS: parquet files in food-security-pipeline-taxi-bucket
+- NEXT_STEP: Module 3 - dbt transformations
 
 ## Known Pitfalls
 - gcloud not in PATH by default: run source /home/codespace/google-cloud-sdk/path.bash.inc
 - terraform not in PATH by default: installed to /usr/local/bin/terraform
 - pip install needs: pip install -r requirements.txt (not auto-installed)
 - Multi-line terminal pastes get mangled: use python3 -c or VS Code editor instead
+- docker compose must be run from 01-docker-terraform/docker/ directory
+- Kestra OSS secrets: use SECRET_ prefixed env vars in docker-compose, not UI
+- Kestra BigQuery: use LoadFromGcs task for GCS URIs, not Load
