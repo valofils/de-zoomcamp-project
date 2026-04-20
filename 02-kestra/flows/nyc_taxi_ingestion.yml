@@ -36,3 +36,11 @@ tasks:
     autodetect: true
     from:
       - "gs://food-security-pipeline-taxi-bucket/yellow_tripdata_{{inputs.year}}-{{inputs.month}}.parquet"
+
+triggers:
+  - id: monthly_schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 9 5 * *"
+    inputs:
+      year: "{{ trigger.date | date('yyyy') }}"
+      month: "{{ trigger.date | date('MM') }}"
