@@ -21,14 +21,14 @@
 - GCP_KEY=/home/codespace/.gcp/gcp-key.json
 
 ## Current State
-- MODULE: 2 - Kestra Workflow Orchestration
+- MODULE: 3 - Analytics Engineering (dbt)
 - STATUS: Complete
-- LAST_COMMIT: 1515a3e - feat: add monthly schedule trigger to taxi ingestion flow
-- Kestra running at port 8080 (pgAdmin at 8090)
-- Flow: nyc_taxi_ingestion (de.zoomcamp namespace)
-- BigQuery: 20.3M rows in food-security-pipeline.ny_taxi.yellow_tripdata (2024-01 to 2024-06)
-- GCS: parquet files in food-security-pipeline-taxi-bucket
-- NEXT_STEP: Module 3 - dbt transformations
+- LAST_COMMIT: d18a79c - chore: remove profiles.yml from tracking
+- dbt project: 04-analytics-engineering/taxi_rides_ny/
+- BigQuery staging: ny_taxi_staging.stg_yellow_tripdata (view)
+- BigQuery core: ny_taxi_core.dim_zones (255 rows), ny_taxi_core.fact_trips (16.1M rows), ny_taxi_core.dm_monthly_zone_revenue (1.4k rows)
+- dbt tests: 14 pass, 4 warn (expected TLC data quality issues), 0 errors
+- NEXT_STEP: Module 4 - Data Ingestion (dlt workshop) or Module 5 - Batch (Spark)
 
 ## Known Pitfalls
 - gcloud not in PATH by default: run source /home/codespace/google-cloud-sdk/path.bash.inc
@@ -38,3 +38,6 @@
 - docker compose must be run from 01-docker-terraform/docker/ directory
 - Kestra OSS secrets: use SECRET_ prefixed env vars in docker-compose, not UI
 - Kestra BigQuery: use LoadFromGcs task for GCS URIs, not Load
+- dbt location must match BQ dataset: us-central1 (not US)
+- dbt profiles.yml: keep only at ~/.dbt/profiles.yml, never commit to git
+- dbt target/, dbt_packages/, logs/ are gitignored
