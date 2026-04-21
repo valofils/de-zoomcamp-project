@@ -255,3 +255,13 @@ Ethiopia (ET), Madagascar (MG), Kenya (KE), Somalia (SO), Sudan (SD), South Suda
 [FEWS NET Data Warehouse (FDW) API](https://fdw.fews.net/api/) — public, no authentication required.
 
 FEWS NET is funded by USAID and produces IPC-compatible food security analysis across ~35 countries.
+
+## Dashboard
+
+View the live dashboard: [FEWS NET Food Insecurity Dashboard](https://datastudio.google.com/reporting/e15d46b4-aa49-4700-9049-c34ab3b27b78)
+
+- **Tile 1:** Phase 3+ population by country (latest period, Current Situation scenario)
+- **Tile 2:** Phase 3+ population trends over time, broken down by country
+
+**Note for peer reviewers:** `project/dbt/fewsnet/profiles.yml` contains a hardcoded path to the GCP service account keyfile (`/home/codespace/.gcp/gcp-key.json`). 
+Update this path to match your local credentials before running dbt commands.
