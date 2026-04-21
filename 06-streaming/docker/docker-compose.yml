@@ -1,0 +1,90 @@
+version: "3.8"
+
+networks:
+  streaming-net:
+    driver: bridge
+
+volumes:
+  redpanda-data:
+
+services:
+
+  # ─── Redpanda (Kafka-compatible broker) ─────────────────────────────────────
+  redpanda-1:
+    image: redpandadata/redpanda:latest
+    container_name: redpanda-1
+    command:
+      - redpanda start
+      - --smp 1
+      - --memory 512M
+      - --overprovisioned
+      - --node-id 0
+      - --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda-1:29092,OUTSIDE://localhost:9092
+      - --pandaproxy-addr 0.0.0.0:8082
+      - --advertise-pandaproxy-addr localhost:8082
+    ports:
+      - "9092:9092"       # Kafka API (host access)
+      - "29092:29092"     # Kafka API (inter-container)
+      - "8081:8081"       # Schema Registry
+      - "8082:8082"       # Pandaproxy (REST)
+      - "9644:9644"       # Admin API
+    volumes:
+      - redpanda-data:/var/lib/redpanda/data
+    networks:
+      - streaming-net
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy.*true'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ─── Flink JobManager ────────────────────────────────────────────────────────
+  jobmanager:
+    image: flink:1.18-scala_2.12-java11
+    container_name: jobmanager
+    command: jobmanager
+    ports:
+      - "8083:8081"       # Flink Web UI (mapped to 8083 to avoid Redpanda clash)
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        parallelism.default: 2
+    networks:
+      - streaming-net
+
+  # ─── Flink TaskManager ───────────────────────────────────────────────────────
+  taskmanager:
+    image: flink:1.18-scala_2.12-java11
+    container_name: taskmanager
+    command: taskmanager
+    depends_on:
+      - jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+        parallelism.default: 2
+    networks:
+      - streaming-net
+
+  # ─── PostgreSQL (landing zone for Flink sink) ────────────────────────────────
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - streaming-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
