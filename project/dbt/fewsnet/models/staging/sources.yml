@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: fewsnet_raw
+    database: "food-security-pipeline"
+    schema: fewsnet_raw
+    description: "Raw FEWS NET FDW API data loaded by the ingestion pipeline"
+
+    tables:
+      - name: ipc_population
+        description: "Phase 3+ population aggregates by country and reporting period."
+        columns:
+          - name: country
+            tests: [not_null]
+          - name: projection_start
+            tests: [not_null]
+          - name: phase
+            tests: [not_null]
+          - name: scenario
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['CS', 'ML', 'PN']
+          - name: value
+            description: "IPC phase value (1-5). Nullable — some boundary areas have no classification."
+
+      - name: ipc_phases
+        description: "Subnational IPC phase classifications."
+        columns:
+          - name: country
+            tests: [not_null]
+          - name: projection_start
+            tests: [not_null]
+          - name: value
+            description: "IPC phase value (1-5). Nullable — some boundary areas have no classification."

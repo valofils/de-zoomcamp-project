@@ -1,0 +1,98 @@
+id: fewsnet_pipeline
+namespace: dezoomcamp.fewsnet
+
+description: |
+  End-to-end FEWS NET acute food insecurity pipeline.
+  1. Fetch raw CSVs from FDW API → GCS
+  2. Load GCS → BigQuery raw tables (partitioned + clustered)
+  3. Run dbt transformations
+
+# -------------------------------------------------------------------
+# Run monthly on the 1st at 06:00 UTC, or trigger manually
+# -------------------------------------------------------------------
+triggers:
+  - id: monthly_schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 6 1 * *"
+
+# -------------------------------------------------------------------
+# Inputs — override at runtime if needed
+# -------------------------------------------------------------------
+inputs:
+  - id: gcs_bucket
+    type: STRING
+    defaults: "{{ envs.GCS_BUCKET }}"
+
+  - id: bq_project
+    type: STRING
+    defaults: "{{ envs.BQ_PROJECT }}"
+
+  - id: start_date
+    type: STRING
+    defaults: "2017-01-01"
+
+  - id: end_date
+    type: STRING
+    defaults: "{{ now() | date('yyyy-MM-dd') }}"
+
+# -------------------------------------------------------------------
+# Tasks
+# -------------------------------------------------------------------
+tasks:
+
+  # Task 1 — Fetch FEWS NET API → GCS
+  - id: fetch_fewsnet
+    type: io.kestra.plugin.scripts.python.Commands
+    namespaceFiles:
+      enabled: true
+    containerImage: python:3.12-slim
+    beforeCommands:
+      - pip install requests google-cloud-storage --quiet
+    env:
+      GCS_BUCKET: "{{ inputs.gcs_bucket }}"
+      START_DATE: "{{ inputs.start_date }}"
+      END_DATE:   "{{ inputs.end_date }}"
+      GOOGLE_APPLICATION_CREDENTIALS: /workspace/credentials/gcp-service-account.json
+    commands:
+      - python /workspace/project/ingestion/fetch_fewsnet.py
+
+  # Task 2 — Load GCS CSVs → BigQuery
+  - id: load_to_bigquery
+    type: io.kestra.plugin.scripts.python.Commands
+    namespaceFiles:
+      enabled: true
+    containerImage: python:3.12-slim
+    beforeCommands:
+      - pip install google-cloud-bigquery google-cloud-storage --quiet
+    env:
+      GCS_BUCKET:  "{{ inputs.gcs_bucket }}"
+      BQ_PROJECT:  "{{ inputs.bq_project }}"
+      GOOGLE_APPLICATION_CREDENTIALS: /workspace/credentials/gcp-service-account.json
+    commands:
+      - python /workspace/project/ingestion/load_to_bigquery.py
+    dependsOn:
+      - fetch_fewsnet
+
+  # Task 3 — dbt run + test
+  - id: dbt_run
+    type: io.kestra.plugin.scripts.shell.Commands
+    containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.0
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: /workspace/credentials/gcp-service-account.json
+      BQ_PROJECT: "{{ inputs.bq_project }}"
+    commands:
+      - cd /workspace/project/dbt/fewsnet
+      - dbt deps
+      - dbt run --profiles-dir .
+      - dbt test --profiles-dir .
+    dependsOn:
+      - load_to_bigquery
+
+# -------------------------------------------------------------------
+# Error handling — notify on failure (optional: add Slack/email task)
+# -------------------------------------------------------------------
+errors:
+  - id: log_failure
+    type: io.kestra.plugin.core.log.Log
+    message: "Pipeline FAILED at task {{ task.id }} — {{ error.message }}"
+    level: ERROR

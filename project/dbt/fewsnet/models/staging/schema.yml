@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: stg_ipc_population
+    description: "Cleaned Phase 3+ population estimates from FEWS NET FDW."
+    columns:
+      - name: country_code
+        tests: [not_null]
+      - name: period_date
+        tests: [not_null]
+      - name: scenario
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CS', 'ML', 'PN']
+      - name: population_estimate
+        tests: [not_null]
+
+  - name: stg_ipc_phases
+    description: "Cleaned subnational IPC phase classifications from FEWS NET FDW."
+    columns:
+      - name: country_code
+        tests: [not_null]
+      - name: area_name
+        tests: [not_null]
+      - name: period_date
+        tests: [not_null]
+      - name: ipc_phase
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false

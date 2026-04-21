@@ -24,3 +24,13 @@ profiles.yml
 # Spark output data
 05-batch/data/*.parquet
 05-batch/data/yellow_oct2024_4partitions/
+
+# FEWS NET project
+project/terraform/terraform.tfvars
+project/terraform/.terraform/
+project/terraform/*.tfstate
+project/terraform/*.tfstate.backup
+project/terraform/.terraform.lock.hcl
+project/dbt/fewsnet/target/
+project/dbt/fewsnet/dbt_packages/
+project/fewsnet_project.tar.gz
