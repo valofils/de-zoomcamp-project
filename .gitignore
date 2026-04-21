@@ -19,3 +19,8 @@ dbt_packages/
 logs/
 package-lock.yml
 profiles.yml
+*.duckdb
+
+# Spark output data
+05-batch/data/*.parquet
+05-batch/data/yellow_oct2024_4partitions/
