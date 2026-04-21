@@ -42,7 +42,7 @@ services:
 
   # ─── Flink JobManager ────────────────────────────────────────────────────────
   jobmanager:
-    image: flink:1.18-scala_2.12-java11
+    build: .
     container_name: jobmanager
     command: jobmanager
     ports:
@@ -57,7 +57,7 @@ services:
 
   # ─── Flink TaskManager ───────────────────────────────────────────────────────
   taskmanager:
-    image: flink:1.18-scala_2.12-java11
+    build: .
     container_name: taskmanager
     command: taskmanager
     depends_on:
